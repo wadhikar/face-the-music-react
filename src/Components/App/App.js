@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import FormData from 'form-data';
 
-import logo from './../../logo.svg';
+import logo from './../../Sound-Wave.png';
 import './App.css';
 
 
