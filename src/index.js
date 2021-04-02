@@ -4,6 +4,7 @@ import './index.css';
 // import App from './App';
 import App from './Components/App/App.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'jquery';
 
 import reportWebVitals from './reportWebVitals';
 

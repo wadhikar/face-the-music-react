@@ -2,9 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import FormData from 'form-data';
 import { Badge } from 'reactstrap';
-import jquery from 'jquery';
 
-// import { Form, FormGroup, Button, Input, FormText } from 'reactstrap';
 import FileInput from './../FileInput/FileInput'
 import Player from './../Player/Player'
 
@@ -64,7 +62,6 @@ class App extends React.Component {
   render() {
     const uri = this.state.uri;
     const embedded = this.state.embedded;
-    const newSelfie = this.state.newSelfie;
     return (
       <div className="App">
       <header className="App-header">
