@@ -1,23 +1,18 @@
 import React from 'react';
 import axios from 'axios';
 import FormData from 'form-data';
+import { Badge } from 'reactstrap';
+import jquery from 'jquery';
+
+// import { Form, FormGroup, Button, Input, FormText } from 'reactstrap';
+import FileInput from './../FileInput/FileInput'
+import Player from './../Player/Player'
 
 import logo from './../../Sound-Wave.png';
 import './App.css';
 
 
-function Player(props) {
-  return (
-    <iframe
-      src={props.embedded}
-      allow="encrypted-media"
-      title="Spotify-Embedded-Player"
-      width="300"
-      height="380"
-    >
-    </iframe>
-  );
-}
+
 
 class App extends React.Component {
   constructor(props) {
@@ -29,6 +24,7 @@ class App extends React.Component {
       embedded: null,
       userImage: null,
       title: '',
+      newSelfie: true
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     // this.handleChange = this.handleChange.bind(this);
@@ -65,11 +61,10 @@ class App extends React.Component {
       .catch(err => console.log(err))
   }
 
-  // Add an embedded player that will play playlist after it is retrieved
-  // Add a button to open Spotify app if user wants to use native app instead
   render() {
     const uri = this.state.uri;
     const embedded = this.state.embedded;
+    const newSelfie = this.state.newSelfie;
     return (
       <div className="App">
       <header className="App-header">
@@ -77,46 +72,24 @@ class App extends React.Component {
         <h1>
           Welcome to the Face the Music.
         </h1>
-        <p>
-          Upload a selfie below:
-        </p>
         <div id="selfie-div">
-          {/* {!uri && !embedded  && ( */}
-            {/* <FileInput
-              handleSubmit={this.handleSubmit}
-              handleChange={this.handleChange}
-            /> */}
-            <form
-              onSubmit={this.handleSubmit}
-              encType="multipart/form-data"
-              action=""
-            >
-            <p>
-              <input
-                type="file"
-                id="image"
-                accept="image/png, image/jpeg"  
-                onChange={this.handleImageChange} 
-                required  
-              />
-            </p>
-            <input type="submit"/>
-            </form>
-          {/* )} */}
+          <p id="next-selfie">
+            Upload a selfie below:
+          </p>
+          <FileInput
+              formSubmit={this.handleSubmit}
+              inputChange={this.handleImageChange}
+          />
         </div>
         <div>
           {uri && (
-            <a
-              className="Spotify-button"
+            <Badge
               href={uri}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Play music on the app/web player.
-            </a>
+              color="success"
+            >Play music on the app/web player.</Badge>
           )}
         </div>
-        <div>
+        <div id="Player">
           {embedded && (
             <Player
               embedded={embedded}
