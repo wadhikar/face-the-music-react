@@ -67,11 +67,14 @@ class App extends React.Component {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <h1>
-          Welcome to the Face the Music.
+          Welcome to Face the Music.
         </h1>
         <div id="selfie-div">
+          <p>
+            What are you in the mood for?
+          </p>
           <p id="next-selfie">
-            Upload a selfie below:
+            Upload a selfie below to find a playlist:
           </p>
           <FileInput
               formSubmit={this.handleSubmit}
