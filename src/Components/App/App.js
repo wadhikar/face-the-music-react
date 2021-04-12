@@ -28,7 +28,6 @@ class App extends React.Component {
       title: '',
       newSelfie: true,
       isUploadState: false,
-      isPlayState: true,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     // this.handleChange = this.handleChange.bind(this);
@@ -76,8 +75,8 @@ class App extends React.Component {
   render() {
     const uri = this.state.uri;
     const embedded = this.state.embedded;
-    const hideUploadForm = this.state.isPlayState;
     const showUploadForm = this.state.isUploadState;
+
     return (
       <div className="App">
       <header className="App-header">
@@ -99,7 +98,7 @@ class App extends React.Component {
         </rr.Fade>
         <Button color="primary" onClick={this.handleScanButtonClick}>Start a scan!</Button>
         <rr.Roll right when={showUploadForm}>
-          <div id="upload">
+          <div id="upload" style={{display: showUploadForm ? 'block' : 'none'}}>
             <p id="next-selfie">
               Upload a selfie below to find a playlist:
             </p>
@@ -109,23 +108,25 @@ class App extends React.Component {
             />
           </div>
         </rr.Roll>
-        <div>
-          {uri && (
-            <Badge
-              href={uri}
-              color="success"
-            >
-              Play music on the app/web player.
-            </Badge>
-          )}
-        </div>
-        <div id="Player">
-          {embedded && (
-            <Player
-              embedded={embedded}
-            />
-          )}
-        </div>      
+        <rr.Slide bottom>
+          <div>
+            {uri && (
+              <Badge
+                href={uri}
+                color="success"
+              >
+                Play music on the app/web player.
+              </Badge>
+            )}
+          </div>
+          <div id="Player">
+            {embedded && (
+              <Player
+                embedded={embedded}
+              />
+            )}
+          </div>
+        </rr.Slide>      
       </header>
       
     </div>
