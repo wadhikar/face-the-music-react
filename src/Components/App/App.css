@@ -21,3 +21,14 @@
 #Player  {
   margin-top: 2vmin;
 }
+
+.intro {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 70vw;
+}
+
+.muted {
+  display: none;
+}
