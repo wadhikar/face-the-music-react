@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import FormData from 'form-data';
 import { Badge, Button } from 'reactstrap';
-import * as rr from 'react-reveal/';
+import {Bounce, Fade, Roll, Slide} from 'react-reveal/';
 
 // import Fade from 'react-reveal/Fade';
 // import RubberBand from 'react-reveal/RubberBand';
@@ -80,24 +80,24 @@ class App extends React.Component {
     return (
       <div className="App">
       <header className="App-header">
-        <rr.Bounce top>
+        <Bounce top>
             <img src={logo} className="App-logo" alt="logo" />
-        </rr.Bounce>
+        </Bounce>
         <h1>
           Welcome to Face the Music.
         </h1>
-        <rr.Fade right>
+        <Fade right>
           <p>
             What are you in the mood for?
           </p>
-        </rr.Fade>
-        <rr.Fade left>
+        </Fade>
+        <Fade left>
           <p className="intro">
             Face the Music takes a selfie, scans your emotions, and finds you a playlist suitable for that mood.
           </p>
-        </rr.Fade>
+        </Fade>
         <Button color="primary" onClick={this.handleScanButtonClick}>Start a scan!</Button>
-        <rr.Roll right when={showUploadForm}>
+        <Roll right when={showUploadForm}>
           <div id="upload" style={{display: showUploadForm ? 'block' : 'none'}}>
             <p id="next-selfie">
               Upload a selfie below to find a playlist:
@@ -107,8 +107,8 @@ class App extends React.Component {
                 inputChange={this.handleImageChange}
             />
           </div>
-        </rr.Roll>
-        <rr.Slide bottom>
+        </Roll>
+        <Slide bottom>
           <div>
             {uri && (
               <Badge
@@ -126,7 +126,7 @@ class App extends React.Component {
               />
             )}
           </div>
-        </rr.Slide>      
+        </Slide>      
       </header>
       
     </div>
