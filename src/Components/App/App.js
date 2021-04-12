@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import FormData from 'form-data';
-import { Badge } from 'reactstrap';
+import { Badge, Button } from 'reactstrap';
 import * as rr from 'react-reveal/';
 
 // import Fade from 'react-reveal/Fade';
@@ -26,7 +26,9 @@ class App extends React.Component {
       embedded: null,
       userImage: null,
       title: '',
-      newSelfie: true
+      newSelfie: true,
+      isUploadState: false,
+      isPlayState: true,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     // this.handleChange = this.handleChange.bind(this);
@@ -41,6 +43,7 @@ class App extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
+    this.handleScanButtonClick();
     console.log(this.state);
 
     let form_data = new FormData();
@@ -63,9 +66,18 @@ class App extends React.Component {
       .catch(err => console.log(err))
   }
 
+  handleScanButtonClick = event => {
+    this.setState({
+      isUploadState: !this.state.isUploadState,
+      isPlayState: !this.state.isPlayState
+    })
+  }
+
   render() {
     const uri = this.state.uri;
     const embedded = this.state.embedded;
+    const hideUploadForm = this.state.isPlayState;
+    const showUploadForm = this.state.isUploadState;
     return (
       <div className="App">
       <header className="App-header">
@@ -75,24 +87,36 @@ class App extends React.Component {
         <h1>
           Welcome to Face the Music.
         </h1>
-        <div id="selfie-div">
+        <rr.Fade right>
           <p>
             What are you in the mood for?
           </p>
-          <p id="next-selfie">
-            Upload a selfie below to find a playlist:
+        </rr.Fade>
+        <rr.Fade left>
+          <p className="intro">
+            Face the Music takes a selfie, scans your emotions, and finds you a playlist suitable for that mood.
           </p>
-          <FileInput
-              formSubmit={this.handleSubmit}
-              inputChange={this.handleImageChange}
-          />
-        </div>
+        </rr.Fade>
+        <Button color="primary" onClick={this.handleScanButtonClick}>Start a scan!</Button>
+        <rr.Roll right when={showUploadForm}>
+          <div id="upload">
+            <p id="next-selfie">
+              Upload a selfie below to find a playlist:
+            </p>
+            <FileInput
+                formSubmit={this.handleSubmit}
+                inputChange={this.handleImageChange}
+            />
+          </div>
+        </rr.Roll>
         <div>
           {uri && (
             <Badge
               href={uri}
               color="success"
-            >Play music on the app/web player.</Badge>
+            >
+              Play music on the app/web player.
+            </Badge>
           )}
         </div>
         <div id="Player">
