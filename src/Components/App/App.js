@@ -2,6 +2,10 @@ import React from 'react';
 import axios from 'axios';
 import FormData from 'form-data';
 import { Badge } from 'reactstrap';
+import * as rr from 'react-reveal/';
+
+// import Fade from 'react-reveal/Fade';
+// import RubberBand from 'react-reveal/RubberBand';
 
 import FileInput from './../FileInput/FileInput'
 import Player from './../Player/Player'
@@ -65,7 +69,9 @@ class App extends React.Component {
     return (
       <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <rr.Bounce top>
+            <img src={logo} className="App-logo" alt="logo" />
+        </rr.Bounce>
         <h1>
           Welcome to Face the Music.
         </h1>
