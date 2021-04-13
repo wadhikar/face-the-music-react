@@ -3,7 +3,7 @@ import axios from 'axios';
 import FormData from 'form-data';
 import { Badge, Button } from 'reactstrap';
 // TODO: Switch to more modern react-awesome-reveal
-import { Bounce, Fade, Roll, Slide } from 'react-reveal/';
+import { Bounce, Fade, Slide } from 'react-reveal/';
 
 // import Fade from 'react-reveal/Fade';
 // import RubberBand from 'react-reveal/RubberBand';
@@ -29,7 +29,10 @@ class App extends React.Component {
       title: '',
       newSelfie: true,
       isUploadState: false,
+      isPlayState: true,
       emptyUpload: false,
+      faceErrorMessage: "",
+      isFaceErrorResponseState: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     // this.handleChange = this.handleChange.bind(this);
@@ -37,22 +40,32 @@ class App extends React.Component {
   }
 
   handleImageChange = event => {
+    const userImage = event.target.files[0];
+    
+    if (userImage !== undefined) {
+      this.setState({
+        emptyUpload: false,
+      });
+    }
+    
     this.setState({
-      userImage: event.target.files[0],
+      userImage: userImage,
     });
   }
 
   handleSubmit = event => {
     event.preventDefault();
 
-    if (this.state.userImage === null) {
+    if (this.state.userImage === null || this.state.userImage === undefined) {
       this.setState({
-        emptyUpload: true
+        emptyUpload: true,
+        isFaceErrorResponseState: false,
+        faceErrorMessage: ""
       });
       return;
     }
 
-    this.handleScanButtonClick();
+    // this.handleScanButtonClick();
     console.log(this.state);
 
     let form_data = new FormData();
@@ -67,18 +80,31 @@ class App extends React.Component {
     let url = '/api/upload';
     axios.post(url, form_data, {headers: {"Content-type": "multipart/form-data"}})
       .then(res => {
+        console.log(res);
         this.setState({
           uri: res.data.uri,
           embedded: res.data.embedded,
+          isFaceErrorResponseState: false,
+          faceErrorMessage: "",
         });
+        this.handleScanButtonClick();
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        if (err.response) {
+          this.setState({
+            isFaceErrorResponseState: true,
+            faceErrorMessage: err.response.data.error.message
+          });
+        }
+      });
   }
 
   handleScanButtonClick = event => {
     this.setState({
       isUploadState: !this.state.isUploadState,
-      isPlayState: !this.state.isPlayState
+      isPlayState: !this.state.isPlayState,
+      emptyUpload: false,
+      isFaceErrorResponseState: false,
     });
   }
 
@@ -87,6 +113,9 @@ class App extends React.Component {
     const embedded = this.state.embedded;
     const showUploadForm = this.state.isUploadState;
     const emptyUpload = this.state.emptyUpload;
+    const isBadFaceResponse = this.state.isFaceErrorResponseState;
+    const badFaceResponseData = this.state.faceErrorMessage;
+    const showPlayer = this.state.isPlayState;
 
     return (
       <div className="App">
@@ -108,7 +137,7 @@ class App extends React.Component {
           </p>
         </Fade>
         <Button color="primary" onClick={this.handleScanButtonClick}>Start a scan!</Button>
-        <Roll right when={showUploadForm}>
+        <Fade top opposite when={showUploadForm}>
           <div id="upload" style={{display: showUploadForm ? 'block' : 'none'}}>
             <p id="next-selfie">
               Upload a selfie below to find a playlist:
@@ -117,16 +146,23 @@ class App extends React.Component {
                 formSubmit={this.handleSubmit}
                 inputChange={this.handleImageChange}
             />
-            <Fade bottom collapse when={emptyUpload}>
+            <Fade bottom when={emptyUpload}>
               <div className="invalid-feedback" style={{ display: 'block' }}>
                 <p>
                   Please choose an image!
                 </p>
               </div>
             </Fade>
+            <Fade bottom when={isBadFaceResponse}>
+              <div className="invalid-feedback" style={{ display: 'block' }}>
+                <p>
+                  {badFaceResponseData}
+                </p>
+              </div>
+            </Fade>
           </div>
-        </Roll>
-        <Slide bottom>
+        </Fade>
+        <Fade bottom when={showPlayer}>
           <div>
             {uri && (
               <Badge
@@ -136,15 +172,16 @@ class App extends React.Component {
                 Play music on the app/web player.
               </Badge>
             )}
+          
+            <div id="Player">
+              {embedded && (
+                <Player
+                  embedded={embedded}
+                />
+              )}
+            </div>
           </div>
-          <div id="Player">
-            {embedded && (
-              <Player
-                embedded={embedded}
-              />
-            )}
-          </div>
-        </Slide>      
+        </Fade>      
       </header>
       
     </div>
