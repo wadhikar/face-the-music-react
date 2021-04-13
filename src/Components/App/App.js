@@ -2,7 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import FormData from 'form-data';
 import { Badge, Button } from 'reactstrap';
-import {Bounce, Fade, Roll, Slide} from 'react-reveal/';
+// TODO: Switch to more modern react-awesome-reveal
+import { Bounce, Fade, Roll, Slide } from 'react-reveal/';
 
 // import Fade from 'react-reveal/Fade';
 // import RubberBand from 'react-reveal/RubberBand';
@@ -28,20 +29,29 @@ class App extends React.Component {
       title: '',
       newSelfie: true,
       isUploadState: false,
+      emptyUpload: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     // this.handleChange = this.handleChange.bind(this);
     this.handleImageChange = this.handleImageChange.bind(this);
   }
 
-  handleImageChange = (event) => {
+  handleImageChange = event => {
     this.setState({
       userImage: event.target.files[0],
-    })
+    });
   }
 
   handleSubmit = (event) => {
     event.preventDefault();
+
+    if (this.state.userImage === null) {
+      this.setState({
+        emptyUpload: true
+      });
+      return;
+    }
+
     this.handleScanButtonClick();
     console.log(this.state);
 
@@ -60,22 +70,23 @@ class App extends React.Component {
         this.setState({
           uri: res.data.uri,
           embedded: res.data.embedded,
-        })
+        });
       })
-      .catch(err => console.log(err))
+      .catch(err => console.log(err));
   }
 
   handleScanButtonClick = event => {
     this.setState({
       isUploadState: !this.state.isUploadState,
       isPlayState: !this.state.isPlayState
-    })
+    });
   }
 
   render() {
     const uri = this.state.uri;
     const embedded = this.state.embedded;
     const showUploadForm = this.state.isUploadState;
+    const emptyUpload = this.state.emptyUpload;
 
     return (
       <div className="App">
@@ -106,6 +117,13 @@ class App extends React.Component {
                 formSubmit={this.handleSubmit}
                 inputChange={this.handleImageChange}
             />
+            <Fade bottom collapse when={emptyUpload}>
+              <div className="invalid-feedback" style={{ display: 'block' }}>
+                <p>
+                  Please choose an image!
+                </p>
+              </div>
+            </Fade>
           </div>
         </Roll>
         <Slide bottom>
