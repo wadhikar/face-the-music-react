@@ -116,7 +116,7 @@ class App extends React.Component {
           </p>
         </Fade>
         <Button color="primary" onClick={this.handleScanButtonClick}>Start a scan!</Button>
-        <Roll right when={showUploadForm}>
+        <Fade right when={showUploadForm}>
           <div id="upload" style={{display: showUploadForm ? 'block' : 'none'}}>
             <p id="next-selfie">
               Upload a selfie below to find a playlist:
@@ -133,7 +133,7 @@ class App extends React.Component {
               </div>
             </Fade>
           </div>
-        </Roll>
+        </Fade>
         <Slide bottom>
           <div>
             {uri && (
