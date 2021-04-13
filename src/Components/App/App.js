@@ -42,7 +42,7 @@ class App extends React.Component {
     });
   }
 
-  handleSubmit = (event) => {
+  handleSubmit = event => {
     event.preventDefault();
 
     if (this.state.userImage === null) {
