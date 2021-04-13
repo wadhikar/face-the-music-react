@@ -29,6 +29,7 @@ class App extends React.Component {
       title: '',
       newSelfie: true,
       isUploadState: false,
+      isPlayState: true,
       emptyUpload: false,
       faceErrorMessage: "",
       isFaceErrorResponseState: false,
@@ -90,10 +91,9 @@ class App extends React.Component {
       })
       .catch(err => {
         if (err.response) {
-          console.log(err.response.data);
           this.setState({
             isFaceErrorResponseState: true,
-            faceErrorMessage: err.response.data
+            faceErrorMessage: err.response.data.error.message
           });
         }
       });
@@ -102,6 +102,7 @@ class App extends React.Component {
   handleScanButtonClick = event => {
     this.setState({
       isUploadState: !this.state.isUploadState,
+      isPlayState: !this.state.isPlayState,
       emptyUpload: false,
       isFaceErrorResponseState: false,
     });
@@ -114,6 +115,7 @@ class App extends React.Component {
     const emptyUpload = this.state.emptyUpload;
     const isBadFaceResponse = this.state.isFaceErrorResponseState;
     const badFaceResponseData = this.state.faceErrorMessage;
+    const showPlayer = this.state.isPlayState;
 
     return (
       <div className="App">
@@ -135,7 +137,7 @@ class App extends React.Component {
           </p>
         </Fade>
         <Button color="primary" onClick={this.handleScanButtonClick}>Start a scan!</Button>
-        <Fade right when={showUploadForm}>
+        <Fade top opposite when={showUploadForm}>
           <div id="upload" style={{display: showUploadForm ? 'block' : 'none'}}>
             <p id="next-selfie">
               Upload a selfie below to find a playlist:
@@ -144,14 +146,14 @@ class App extends React.Component {
                 formSubmit={this.handleSubmit}
                 inputChange={this.handleImageChange}
             />
-            <Fade bottom collapse when={emptyUpload}>
+            <Fade bottom when={emptyUpload}>
               <div className="invalid-feedback" style={{ display: 'block' }}>
                 <p>
                   Please choose an image!
                 </p>
               </div>
             </Fade>
-            <Fade bottom collapse when={isBadFaceResponse}>
+            <Fade bottom when={isBadFaceResponse}>
               <div className="invalid-feedback" style={{ display: 'block' }}>
                 <p>
                   {badFaceResponseData}
@@ -160,7 +162,7 @@ class App extends React.Component {
             </Fade>
           </div>
         </Fade>
-        <Slide bottom>
+        <Fade bottom when={showPlayer}>
           <div>
             {uri && (
               <Badge
@@ -170,15 +172,16 @@ class App extends React.Component {
                 Play music on the app/web player.
               </Badge>
             )}
+          
+            <div id="Player">
+              {embedded && (
+                <Player
+                  embedded={embedded}
+                />
+              )}
+            </div>
           </div>
-          <div id="Player">
-            {embedded && (
-              <Player
-                embedded={embedded}
-              />
-            )}
-          </div>
-        </Slide>      
+        </Fade>      
       </header>
       
     </div>
