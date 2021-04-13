@@ -37,6 +37,15 @@ class App extends React.Component {
   }
 
   handleImageChange = event => {
+    let userImage = event.target.files[0];
+    
+    if (userImage !== undefined) {
+      this.setState({
+        userImage: userImage,
+        emptyUpload: false,
+      });
+    }
+    
     this.setState({
       userImage: event.target.files[0],
     });
@@ -45,7 +54,7 @@ class App extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    if (this.state.userImage === null) {
+    if (this.state.userImage === null || this.state.userImage === undefined) {
       this.setState({
         emptyUpload: true
       });
