@@ -37,17 +37,16 @@ class App extends React.Component {
   }
 
   handleImageChange = event => {
-    let userImage = event.target.files[0];
+    const userImage = event.target.files[0];
     
     if (userImage !== undefined) {
       this.setState({
-        userImage: userImage,
         emptyUpload: false,
       });
     }
     
     this.setState({
-      userImage: event.target.files[0],
+      userImage: userImage,
     });
   }
 
